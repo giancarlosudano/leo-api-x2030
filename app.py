@@ -1172,24 +1172,28 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
 
 
 """
+    try:
+        data = request.json
+        question = data.get('question')
 
-    data = request.json
-    question = data.get('question')
+        llm = get_gpt()
 
-    llm = get_gpt()
+        input_variables = ["question"]
+        prompt_text = template
+        prompt_template = PromptTemplate(template=prompt_text, input_variables=input_variables)
+        chain = prompt_template | llm | StrOutputParser()				
+        generation = chain.invoke({"question": question})
 
-    input_variables = ["question"]
-    prompt_text = template
-    prompt_template = PromptTemplate(template=prompt_text, input_variables=input_variables)
-    chain = prompt_template | llm | StrOutputParser()				
-    generation = chain.invoke({"question": question})
+        response = {
+            'question': question,
+            'answer': generation
+        }
 
-    response = {
-        'question': question,
-        'answer': generation
-    }
+        return jsonify(response)
 
-    return jsonify(response)
+    except Exception as e:
+        print(e)
+        return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
