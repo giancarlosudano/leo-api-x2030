@@ -8,12 +8,16 @@ import helpers.langchain_helper as lc_hlp
 import helpers.utility_helper as utl_hlp
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/ChatCompletion', methods=['GET'])
+@app.route('/ChatCompletion', methods=['POST'])
+@cross_origin()
 def chat_completion():
-    question = request.args.get('question')
+    question = request.form.get('question')
 
     llm = lc_hlp.get_gpt()
 

@@ -1,5 +1,6 @@
 Flask==2.1.2
 Werkzeug==2.2.2
+flask-cors
 
 # python generics
 python-dotenv==1.0.0
