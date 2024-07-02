@@ -22,15 +22,19 @@ def get_gpt():
 	llm = AzureChatOpenAI(azure_deployment=azure_openai_deployment, temperature=0, streaming=True, azure_endpoint=azure_endpoint, api_key=api_key, api_version=api_version)
 	return llm
 
+def read_file(file_name):
+	with open(file_name, "r", encoding="utf-8") as file:
+		return file.read()
+
 @app.route('/ChatCompletion', methods=['POST'])
 @cross_origin()
 def chat_completion():
     question = request.form.get('question')
 
-    llm = lc_hlp.get_gpt()
+    llm = get_gpt()
 
     input_variables = ["question"]
-    prompt_text = utl_hlp.read_file(os.path.join("prompt","prompt.txt"))
+    prompt_text = read_file(os.path.join("prompt","prompt.txt"))
     prompt_template = PromptTemplate(template=prompt_text, input_variables=input_variables)
     chain = prompt_template | llm | StrOutputParser()				
     generation = chain.invoke({"question": question})
