@@ -14,6 +14,16 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+
+def get_gpt():
+	azure_endpoint: str = os.getenv("AZURE_OPENAI_BASE") or ""
+	api_key = os.getenv("AZURE_OPENAI_API_KEY") or ""
+	api_version: str = os.getenv("AZURE_OPENAI_API_VERSION") or ""
+	azure_openai_deployment : str = os.getenv("AZURE_OPENAI_MODEL_NAME") or ""
+	llm = AzureChatOpenAI(azure_deployment=azure_openai_deployment, temperature=0, streaming=True, azure_endpoint=azure_endpoint, api_key=api_key, api_version=api_version)
+	return llm
+
 @app.route('/ChatCompletion', methods=['POST'])
 @cross_origin()
 def chat_completion():
