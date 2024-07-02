@@ -1173,6 +1173,7 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
 
 """
     try:
+        print('Request received')
         data = request.json
         question = data.get('question')
 
@@ -1181,7 +1182,7 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
         input_variables = ["question"]
         prompt_text = template
         prompt_template = PromptTemplate(template=prompt_text, input_variables=input_variables)
-        chain = prompt_template | llm | StrOutputParser()				
+        chain = prompt_template | llm | StrOutputParser()
         generation = chain.invoke({"question": question})
 
         response = {
@@ -1199,13 +1200,8 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
 # Quali sono gli impianti a distanza superiore ai 300 metri? 
-
 # Quali sono le zone di danno e a che metratura si trovano? Che azioni vanno intraprese per ciascuna zona? 
-
 # Quali sono gli insediamenti produttivi limitrofi all'impianto? 
-
 # Quanti sono i dipendenti dell'impianto? 
-
 # Che tipi di danni potrebbero verificarsi sulla popolazione e quindi vanno controllati? 
-
 # Quali sono le misure di autotutela per le persone presenti? 
