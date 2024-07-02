@@ -1,26 +1,46 @@
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from dotenv import load_dotenv
+from langchain_core.output_parsers import StrOutputParser
+from langchain.prompts import PromptTemplate
+import helpers.langchain_helper as lc_hlp
+import helpers.utility_helper as utl_hlp
+
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Definisci una chiave di autenticazione fissa
-API_KEY = "secret"
-
-@app.route('/ChatCompletion', methods=['POST'])
+@app.route('/ChatCompletion', methods=['GET'])
 def chat_completion():
-    data = request.json
-    question = data.get('question')
-    key = data.get('key')
+    question = request.args.get('question')
 
-    if key != API_KEY:
-        return jsonify({'error': 'Unauthorized'}), 401
+    llm = lc_hlp.get_gpt()
 
-    # Simula una risposta alla domanda
+    input_variables = ["question"]
+    prompt_text = utl_hlp.read_file(os.path.join("prompt","prompt.txt"))
+    prompt_template = PromptTemplate(template=prompt_text, input_variables=input_variables)
+    chain = prompt_template | llm | StrOutputParser()				
+    generation = chain.invoke({"question": question})
+
     response = {
         'question': question,
-        'answer': 'This is a sample response to your question.'
+        'answer': generation
     }
 
     return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+# Quali sono gli impianti a distanza superiore ai 300 metri? 
+
+# Quali sono le zone di danno e a che metratura si trovano? Che azioni vanno intraprese per ciascuna zona? 
+
+# Quali sono gli insediamenti produttivi limitrofi all'impianto? 
+
+# Quanti sono i dipendenti dell'impianto? 
+
+# Che tipi di danni potrebbero verificarsi sulla popolazione e quindi vanno controllati? 
+
+# Quali sono le misure di autotutela per le persone presenti? 
