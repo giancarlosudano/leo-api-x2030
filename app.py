@@ -1173,7 +1173,8 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
 
 """
 
-    question = request.form.get('question')
+    data = request.json
+    question = data.get('question')
 
     llm = get_gpt()
 
