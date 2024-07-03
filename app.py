@@ -6,11 +6,11 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 
 from flask import Flask, request, jsonify
-# from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-# cors = CORS(app)
-# app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 
@@ -23,7 +23,7 @@ def get_gpt():
 	return llm
 
 @app.route('/ChatCompletion', methods=['GET'])
-# @cross_origin()
+@cross_origin()
 def chat_completion():
 	
     template = """
