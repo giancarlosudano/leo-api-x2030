@@ -1193,6 +1193,7 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
+    print("Starting server ----------")
     app.run(host='0.0.0.0', port=80)
 
 # Quali sono gli impianti a distanza superiore ai 300 metri? 
