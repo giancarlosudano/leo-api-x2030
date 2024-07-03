@@ -22,7 +22,7 @@ def get_gpt():
 	llm = AzureChatOpenAI(azure_deployment=azure_openai_deployment, temperature=0, streaming=True, azure_endpoint=azure_endpoint, api_key=api_key, api_version=api_version)
 	return llm
 
-@app.route('/ChatCompletion', methods=['POST'])
+@app.route('/ChatCompletion', methods=['GET'])
 # @cross_origin()
 def chat_completion():
 	
@@ -1170,8 +1170,7 @@ accuratamente chiuse porte e finestre TENENDOSI lontane dalle stesse.
 """
     try:
         print('Request received')
-        data = request.json
-        question = data.get('question')
+        question = request.args.get('question')
 
         llm = get_gpt()
 
